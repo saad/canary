@@ -1,0 +1,98 @@
+[
+  {
+    "id": "nacha:new-return-reason-code-sanctions-compliance-obligations",
+    "source": "nacha",
+    "title": "New Return Reason Code for Sanctions Compliance Obligations",
+    "date": null,
+    "url": "https://www.nacha.org/rules/new-return-reason-code-sanctions-compliance-obligations",
+    "raw_excerpt": "This rule will create a new return reason code (R90) to support an RDFI\u2019s decision to return an entry in compliance with sanctions obligations. This rule also expands Article Three, Section 3.8 (RDFI's Right to Transmit Return Entries) to adopt a unique return time frame for returns related to sanctions compliance obligations."
+  },
+  {
+    "id": "nacha:increasing-same-day-ach-dollar-limit-10-million-0",
+    "source": "nacha",
+    "title": "Increasing the Same Day ACH Dollar Limit to $10 Million",
+    "date": "2027-09-17",
+    "url": "https://www.nacha.org/rules/increasing-same-day-ach-dollar-limit-10-million-0",
+    "raw_excerpt": "This rule amendment will raise the per-entry dollar limit for Same Day ACH from $1 million per payment to $10 million per payment. The effective date is September 17, 2027."
+  },
+  {
+    "id": "nacha:international-ach-transactions-iat",
+    "source": "nacha",
+    "title": "International ACH Transactions (IAT)",
+    "date": null,
+    "url": "https://www.nacha.org/rules/international-ach-transactions-iat",
+    "raw_excerpt": "This set of Rules includes two amendments: Optional Date of Birth Field for IAT Entries and Non-Bank Foreign Financial Agencies in IAT Entries. These new Rules align with Nacha\u2019s strategies and objectives for the ACH Network to improve the ACH user experience, increase awareness and understanding of ACH capabilities, and improve data flows for ACH payments."
+  },
+  {
+    "id": "nacha:registration-iat-contacts-ach-contact-registry",
+    "source": "nacha",
+    "title": "Registration of IAT Contacts in the ACH Contact Registry",
+    "date": null,
+    "url": "https://www.nacha.org/rules/registration-iat-contacts-ach-contact-registry",
+    "raw_excerpt": "This Rule will require a Participating DFI to register their IAT- handling contact with either:"
+  },
+  {
+    "id": "nacha:definition-iat-entries",
+    "source": "nacha",
+    "title": "Definition of IAT Entries",
+    "date": null,
+    "url": "https://www.nacha.org/rules/definition-iat-entries",
+    "raw_excerpt": "Industry participants have indicated difficulty in understanding the existing definition of IAT. The intent of this rule is to provide more clarity for users when making IAT determinations."
+  },
+  {
+    "id": "nacha:funds-availability-requirements-non-same-day-credit-entries",
+    "source": "nacha",
+    "title": "Funds Availability Requirements for Non-Same Day Credit Entries",
+    "date": null,
+    "url": "https://www.nacha.org/rules/funds-availability-requirements-non-same-day-credit-entries",
+    "raw_excerpt": "This rule will eliminate the 5:00 pm local time receipt condition, so that funds availability would be required at 9:00 am (in the RDFI\u2019s local time) on Settlement Date for all non-Same Day ACH credits."
+  },
+  {
+    "id": "nacha:risk-management-topics-fraud-monitoring-phase-2",
+    "source": "nacha",
+    "title": "RISK MANAGEMENT TOPICS \u2013 (Fraud Monitoring Phase 2)",
+    "date": "2026-06-22",
+    "url": "https://www.nacha.org/rules/risk-management-topics-fraud-monitoring-phase-2",
+    "raw_excerpt": "These Rule amendments related to monitoring for fraud become effective on June 19, 2026 and are part of a larger Risk Management package intended to reduce the incidence of successful fraud attempts and improve the recovery of funds after frauds have occurred. NOTE: As June 19 is a federal holiday, the practical effective date for these two rules will be the next banking day \u2013 Monday, June 22, 2026. All affected parties are encouraged to become compliant with these rules as soon as possible, but"
+  },
+  {
+    "id": "nacha:risk-management-topics-fraud-monitoring-phase-1",
+    "source": "nacha",
+    "title": "RISK MANAGEMENT TOPICS \u2013 (Fraud Monitoring Phase 1)",
+    "date": null,
+    "url": "https://www.nacha.org/rules/risk-management-topics-fraud-monitoring-phase-1",
+    "raw_excerpt": "These Rule amendments related to monitoring for fraud are part of a larger Risk Management package intended to reduce the incidence of successful fraud attempts and improve the recovery of funds after frauds have occurred."
+  },
+  {
+    "id": "nacha:risk-management-topics-company-entry-descriptions",
+    "source": "nacha",
+    "title": "RISK MANAGEMENT TOPICS \u2013 Company Entry Descriptions",
+    "date": null,
+    "url": "https://www.nacha.org/rules/risk-management-topics-company-entry-descriptions",
+    "raw_excerpt": "Rules requiring the use of two additional standardized Company Entry Descriptions became effective on March 20, 2026, as part of a larger Risk Management package intended to reduce the incidence of successful fraud attempts and improve the recovery of funds after frauds have occurred."
+  },
+  {
+    "id": "nacha:minor-topics-rule-changes",
+    "source": "nacha",
+    "title": "Minor Topics Rule Changes",
+    "date": null,
+    "url": "https://www.nacha.org/rules/minor-topics-rule-changes",
+    "raw_excerpt": "These changes will become effective January 1, 2026. These changes will have little to no impact on ACH participants and no significant processing or financial impact."
+  },
+  {
+    "id": "nacha:risk-management-topic-april-1-2025",
+    "source": "nacha",
+    "title": "Risk Management Topic - April 1, 2025",
+    "date": null,
+    "url": "https://www.nacha.org/rules/risk-management-topic-april-1-2025",
+    "raw_excerpt": "This portion of a recent Rule amendment becomes effective on April 1, 2025 and requires an RDFI to advise the ODFI of the status of a Request for Return within ten (10) banking days of receipt of the ODFI\u2019s request."
+  },
+  {
+    "id": "nacha:risk-management-topics-october-1-2024",
+    "source": "nacha",
+    "title": "RISK MANAGEMENT TOPICS \u2013 October 1, 2024",
+    "date": null,
+    "url": "https://www.nacha.org/rules/risk-management-topics-october-1-2024",
+    "raw_excerpt": "These Rule amendments are part of a larger Risk Management package intended to reduce the incidence of successful fraud attempts and improve the recovery of funds after frauds have occurred."
+  }
+]

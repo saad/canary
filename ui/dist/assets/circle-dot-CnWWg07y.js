@@ -1,0 +1,1 @@
+import{Et as e}from"./index-B0VH3zWX.js";var t=[[`circle`,{cx:`12`,cy:`12`,r:`10`,key:`1mglay`}],[`circle`,{cx:`12`,cy:`12`,r:`1`,key:`41hilf`}]],n=e(`circle-dot`,t);export{t as __iconNode,n as default};

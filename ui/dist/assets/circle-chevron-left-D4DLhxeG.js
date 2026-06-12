@@ -1,0 +1,1 @@
+import{Et as e}from"./index-B0VH3zWX.js";var t=[[`circle`,{cx:`12`,cy:`12`,r:`10`,key:`1mglay`}],[`path`,{d:`m14 16-4-4 4-4`,key:`ojs7w8`}]],n=e(`circle-chevron-left`,t);export{t as __iconNode,n as default};

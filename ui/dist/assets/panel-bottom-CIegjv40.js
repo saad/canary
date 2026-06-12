@@ -1,0 +1,1 @@
+import{Et as e}from"./index-B0VH3zWX.js";var t=[[`rect`,{width:`18`,height:`18`,x:`3`,y:`3`,rx:`2`,key:`afitv7`}],[`path`,{d:`M3 15h18`,key:`5xshup`}]],n=e(`panel-bottom`,t);export{t as __iconNode,n as default};

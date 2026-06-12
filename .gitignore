@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+data/canary.db
+data/inject_queue.json
+guild-agent/
+data/injected_at.json
+data/poll_status.json
+data/c1_cache.json
+data/server.log
+nohup.out
+.DS_Store
+CLAUDE.md
+DEMO.md
+data/fom_charter.json

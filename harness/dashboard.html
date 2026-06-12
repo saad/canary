@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Canary — Regulatory Intelligence</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #0e1116; --panel: #161b22; --panel2: #1c2430; --line: #2b3442;
+    --text: #e6edf3; --dim: #8b97a8; --canary: #ffd33d;
+    --low: #3fb950; --med: #d29922; --high: #f85149;
+    --chip-lending:#7c5cff; --chip-payments:#2f81f7; --chip-bsa:#f85149;
+    --chip-ops:#3fb950; --chip-tax:#d29922; --chip-membership:#39c5cf;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--bg); color: var(--text);
+         font: 14px/1.5 -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { display: flex; align-items: center; gap: 14px; padding: 14px 22px;
+           border-bottom: 1px solid var(--line); position: sticky; top: 0;
+           background: var(--bg); z-index: 5; }
+  header h1 { font-size: 20px; letter-spacing: .5px; }
+  header h1 .bird { color: var(--canary); }
+  .tag { font-size: 11px; color: var(--dim); margin-right: auto; }
+  .integrations { display: flex; gap: 8px; }
+  .integ { font-size: 11px; padding: 3px 9px; border-radius: 999px;
+           border: 1px solid var(--line); color: var(--dim); }
+  .integ.on { border-color: #2ea04366; color: #56d364; }
+  nav { display: flex; gap: 4px; padding: 10px 22px 0; }
+  nav button { background: none; border: none; color: var(--dim); padding: 8px 16px;
+               font-size: 14px; cursor: pointer; border-bottom: 2px solid transparent; }
+  nav button.active { color: var(--canary); border-color: var(--canary); }
+  main { padding: 18px 22px; max-width: 1060px; margin: 0 auto; }
+
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+  .filters .label { color: var(--dim); font-size: 12px; }
+  .fchip { font-size: 12px; padding: 4px 12px; border-radius: 999px; cursor: pointer;
+           border: 1px solid var(--line); color: var(--dim); background: var(--panel); }
+  .fchip.active { border-color: var(--canary); color: var(--canary); }
+  #injectBtn { background: var(--panel2); color: var(--canary);
+               border: 1px dashed var(--canary); border-radius: 8px; padding: 6px 14px;
+               cursor: pointer; font-size: 12px; }
+  #briefBtn { margin-left: auto; background: #2a2440; color: #c4b5fd;
+              border: 1px solid #6d5bd0; border-radius: 8px; padding: 6px 14px;
+              cursor: pointer; font-size: 12px; }
+  #c1panel { background: var(--panel); border: 1px solid #6d5bd0; border-radius: 12px;
+             padding: 16px; margin-bottom: 16px; }
+  #c1panel .c1head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+                     font-size: 12px; color: #c4b5fd; }
+  #c1panel .c1head .close { margin-left: auto; cursor: pointer; color: var(--dim);
+                            background: none; border: none; font-size: 16px; }
+  .fb-stats { display: flex; gap: 12px; margin-bottom: 12px; }
+  .fb-stat { background: var(--panel2); border-radius: 10px; padding: 10px 18px; text-align: center; }
+  .fb-stat b { display: block; font-size: 22px; }
+  .fb-stat span { font-size: 11px; color: var(--dim); text-transform: uppercase; }
+  .fb-item { padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+          padding: 14px 16px 14px 20px; margin-bottom: 14px; position: relative;
+          overflow: hidden; }
+  .card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; }
+  .card.LOW::before { background: var(--low); }
+  .card.MED::before { background: var(--med); }
+  .card.HIGH::before { background: var(--high); }
+  .card.new { animation: arrive .7s ease-out; }
+  @keyframes arrive {
+    from { transform: translateY(-14px); opacity: 0; box-shadow: 0 0 0 3px var(--canary); }
+    to   { transform: none; opacity: 1; box-shadow: none; }
+  }
+  .card .top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 6px;
+           text-transform: uppercase; letter-spacing: .4px; }
+  .badge.federal_register { background: #1f3a5f; color: #79b8ff; }
+  .badge.ncua { background: #2d2a55; color: #b3a7ff; }
+  .badge.nacha { background: #14432e; color: #56d364; }
+  .badge.irs { background: #4d2121; color: #ff9492; }
+  .impact { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 6px; }
+  .impact.LOW { background: #1b3022; color: var(--low); }
+  .impact.MED { background: #3a2e12; color: var(--med); }
+  .impact.HIGH { background: #471b1b; color: var(--high); }
+  .when { color: var(--dim); font-size: 12px; margin-left: auto; }
+  .card h3 { font-size: 15px; margin: 8px 0 6px; }
+  .card h3 a { color: var(--text); text-decoration: none; }
+  .card h3 a:hover { color: var(--canary); }
+  .units { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+  .unit { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 999px;
+          color: #0e1116; }
+  .unit[data-u="Lending"] { background: var(--chip-lending); color: #fff; }
+  .unit[data-u="Payments"] { background: var(--chip-payments); color: #fff; }
+  .unit[data-u="BSA/Compliance"] { background: var(--chip-bsa); color: #fff; }
+  .unit[data-u="Ops"] { background: var(--chip-ops); }
+  .unit[data-u="Accounting/Tax"] { background: var(--chip-tax); }
+  .unit[data-u="Membership"] { background: var(--chip-membership); }
+  .summary { color: #c4cfdb; font-size: 13px; }
+  .meta { color: var(--dim); font-size: 12px; margin-top: 8px; display: flex; gap: 16px; }
+  .meta a { color: #58a6ff; }
+  .escbar { display: flex; align-items: center; gap: 12px; background: #471b1b;
+            border: 1px solid var(--high); border-radius: 8px; padding: 8px 12px;
+            margin-top: 10px; }
+  .escbar.pulse { animation: pulse 1.6s infinite; }
+  @keyframes pulse { 50% { box-shadow: 0 0 14px #f8514955; } }
+  .escbar .esclabel { color: var(--high); font-weight: 700; font-size: 12px;
+                      text-transform: uppercase; letter-spacing: .5px; }
+  .escbar button { margin-left: auto; background: var(--high); border: none; color: #fff;
+                   font-weight: 600; padding: 6px 16px; border-radius: 6px; cursor: pointer; }
+  .escbar.acked { background: #1b3022; border-color: var(--low); }
+  .escbar.acked .esclabel { color: var(--low); }
+
+  .fombox { background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+            padding: 20px; }
+  .fombox h2 { font-size: 16px; margin-bottom: 4px; }
+  .fombox .sub { color: var(--dim); font-size: 12px; margin-bottom: 14px; }
+  .fomrow { display: flex; gap: 10px; }
+  .fomrow input { flex: 1; background: var(--bg); color: var(--text); border: 1px solid var(--line);
+                  border-radius: 8px; padding: 10px 14px; font-size: 14px; }
+  .fomrow button { background: var(--canary); border: none; color: #1c1c00; font-weight: 700;
+                   border-radius: 8px; padding: 10px 22px; cursor: pointer; }
+  .fomrow button:disabled { opacity: .5; }
+  #fomAnswer { margin-top: 16px; padding: 14px; border-radius: 8px; background: var(--panel2);
+               display: none; }
+  #fomAnswer .verdict { font-weight: 800; font-size: 14px; letter-spacing: .5px; }
+  #fomAnswer .verdict.ELIGIBLE { color: var(--low); }
+  #fomAnswer .verdict.NOT_ELIGIBLE { color: var(--high); }
+  #fomAnswer .verdict.UNVERIFIABLE { color: var(--med); }
+  .chain { margin-top: 12px; border-left: 2px solid var(--line); padding-left: 16px; }
+  .chainstep { position: relative; padding-bottom: 12px; font-size: 12.5px; }
+  .chainstep::before { content: ""; position: absolute; left: -21px; top: 4px; width: 8px;
+                       height: 8px; border-radius: 50%; background: var(--canary); }
+  .chainstep .s { color: var(--canary); font-weight: 600; }
+  .chainstep .d { color: var(--dim); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  th { color: var(--dim); font-weight: 600; text-transform: uppercase; font-size: 11px; }
+  td.act { font-weight: 600; }
+  tr.escalate td.act { color: var(--high); }
+  tr.acknowledge td.act { color: var(--low); }
+  tr.guild_review td.act { color: #b3a7ff; }
+  tr.fom_verify td.act { color: var(--chip-membership); }
+  .backend { font-size: 11px; color: var(--dim); margin-bottom: 10px; }
+  .backend b { color: #ffa657; }
+  .empty { color: var(--dim); text-align: center; padding: 40px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="bird">⬤</span> Canary</h1>
+  <span class="tag">the canary catches the change before it hits you</span>
+  <div class="integrations" id="integ"></div>
+</header>
+<nav>
+  <button class="active" data-tab="feed">Live Feed</button>
+  <button data-tab="fom">FOM Check</button>
+  <button data-tab="audit">Audit Trail</button>
+</nav>
+<main>
+  <section id="tab-feed">
+    <div class="filters" id="filters">
+      <span class="label">FILTER BY UNIT</span>
+      <button id="briefBtn" title="Generate the morning brief UI with Thesys C1">✨ AI morning brief</button>
+      <button id="injectBtn" title="Demo: drop the FIRE→IRIS item into the feed">⚡ inject demo item</button>
+    </div>
+    <div id="c1panel" style="display:none"></div>
+    <div id="feed"><div class="empty">Watching the skies… items appear as the canary detects them.</div></div>
+  </section>
+
+  <section id="tab-fom" style="display:none">
+    <div class="fombox">
+      <h2>Field-of-Membership Check</h2>
+      <div class="sub">Geocode → real-place check → district check, with the evidence chain compliance needs.</div>
+      <div class="fomrow">
+        <input id="fomInput" placeholder="Can we serve a member at 301 W 2nd Street, Austin, TX?"
+               value="Can we serve a member at 301 W 2nd Street, Austin, TX?">
+        <button id="fomBtn">Verify</button>
+      </div>
+      <div id="fomAnswer"></div>
+    </div>
+  </section>
+
+  <section id="tab-audit" style="display:none">
+    <div class="backend" id="auditBackend"></div>
+    <table>
+      <thead><tr><th>Time (UTC)</th><th>Action</th><th>Source</th><th>Decision</th><th>Autonomy</th><th>Reason</th></tr></thead>
+      <tbody id="auditRows"></tbody>
+    </table>
+  </section>
+</main>
+
+<script>
+const UNITS = ["Lending","Payments","BSA/Compliance","Ops","Accounting/Tax","Membership"];
+const seen = new Set();
+let activeFilters = new Set();
+
+// --- tabs ---
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  ["feed","fom","audit"].forEach(t =>
+    document.getElementById("tab-"+t).style.display = (t === b.dataset.tab ? "" : "none"));
+  if (b.dataset.tab === "audit") loadAudit();
+});
+
+// --- unit filter chips ---
+const filters = document.getElementById("filters");
+const injectBtn = document.getElementById("injectBtn");
+UNITS.forEach(u => {
+  const c = document.createElement("button");
+  c.className = "fchip"; c.textContent = u;
+  c.onclick = () => {
+    c.classList.toggle("active");
+    c.classList.contains("active") ? activeFilters.add(u) : activeFilters.delete(u);
+    applyFilter();
+  };
+  filters.insertBefore(c, injectBtn);
+});
+function applyFilter() {
+  document.querySelectorAll(".card").forEach(card => {
+    const units = JSON.parse(card.dataset.units);
+    card.style.display = (!activeFilters.size || units.some(u => activeFilters.has(u))) ? "" : "none";
+  });
+}
+
+// --- Thesys C1 morning brief (graceful plain-HTML fallback) ---
+let c1Ready = null;
+function loadC1() {
+  if (!c1Ready) c1Ready = (async () => {
+    const css = document.createElement("link");
+    css.rel = "stylesheet";
+    css.href = "https://esm.sh/@crayonai/react-ui@0.9.16/styles/index.css";
+    document.head.appendChild(css);
+    const [React, dom, genui] = await Promise.all([
+      import("https://esm.sh/react@18"),
+      import("https://esm.sh/react-dom@18/client"),
+      import("https://esm.sh/@thesysai/genui-sdk@0.10.1?deps=react@18,react-dom@18"),
+    ]);
+    return { React: React.default, createRoot: dom.createRoot, genui };
+  })();
+  return c1Ready;
+}
+function fallbackBrief(rows, note) {
+  const high = rows.filter(r => r.impact === "HIGH").length;
+  const pending = rows.filter(r => r.escalation === "AWAITING REVIEW").length;
+  return `
+    <div class="fb-stats">
+      <div class="fb-stat"><b>${rows.length}</b><span>items</span></div>
+      <div class="fb-stat"><b style="color:var(--high)">${high}</b><span>high impact</span></div>
+      <div class="fb-stat"><b style="color:var(--med)">${pending}</b><span>awaiting review</span></div>
+    </div>
+    ${rows.map(r => `<div class="fb-item"><span class="impact ${esc(r.impact)}">${esc(r.impact)}</span>
+      <b>${esc(r.title)}</b> — ${esc((r.units || []).join(", "))}
+      ${r.effective ? `· effective ${esc(r.effective)}` : ""}</div>`).join("")}
+    <div style="color:var(--dim);font-size:11px;margin-top:10px">${esc(note)}</div>`;
+}
+document.getElementById("briefBtn").onclick = async () => {
+  const panel = document.getElementById("c1panel");
+  panel.style.display = "block";
+  panel.innerHTML = `<div class="c1head">✨ generating morning brief…</div>`;
+  const data = await (await fetch("/api/c1brief", {method: "POST", body: "{}"})).json();
+  const head = (label) => `<div class="c1head">✨ Morning Brief — ${label}
+    <button class="close" onclick="document.getElementById('c1panel').style.display='none'">✕</button></div>`;
+  if (data.c1) {
+    panel.innerHTML = head("generated by Thesys C1") + `<div id="c1mount"></div>`;
+    try {
+      const { React, createRoot, genui } = await loadC1();
+      createRoot(document.getElementById("c1mount")).render(
+        React.createElement(genui.ThemeProvider, { mode: "dark" },
+          React.createElement(genui.C1Component, { c1Response: data.c1 })));
+    } catch (e) {
+      panel.innerHTML = head("C1 render failed — plain view") +
+        fallbackBrief(JSON.parse("[]"), "SDK load error: " + e);
+    }
+  } else {
+    panel.innerHTML = head("local fallback (C1 unavailable)") +
+      fallbackBrief(data.fallback || [], data.error || "");
+  }
+};
+
+injectBtn.onclick = async () => {
+  injectBtn.textContent = "⚡ injected — watching…";
+  await fetch("/api/inject", {method: "POST", body: "{}"});
+  setTimeout(() => injectBtn.textContent = "⚡ inject demo item", 5000);
+};
+
+// --- live feed ---
+function esc(s) { const d = document.createElement("div"); d.textContent = s ?? ""; return d.innerHTML; }
+function card(b) {
+  const units = (b.business_units || "").split(",").filter(Boolean);
+  const div = document.createElement("div");
+  div.className = `card ${b.impact_level}`;
+  div.dataset.units = JSON.stringify(units);
+  div.dataset.id = b.item_id;
+  const escalated = Number(b.escalated);
+  div.innerHTML = `
+    <div class="top">
+      <span class="badge ${esc(b.item_id.split(":")[0] === "fedreg" ? "federal_register" : b.item_id.split(":")[0])}">${esc(sourceLabel(b))}</span>
+      <span class="impact ${b.impact_level}">${esc(b.impact_level)}</span>
+      <span class="when">detected ${esc((b.first_seen || "").replace("T", " ").slice(0, 19))} UTC</span>
+    </div>
+    <h3><a href="${esc(b.url || "#")}" target="_blank">${esc(b.title || b.item_id)}</a></h3>
+    <div class="units">${units.map(u => `<span class="unit" data-u="${esc(u)}">${esc(u)}</span>`).join("")}</div>
+    <div class="summary">${esc(b.summary)}</div>
+    <div class="meta">
+      <span>effective: <b>${esc(b.effective_date || "unstated")}</b></span>
+      <span>classifier: ${esc(b.classification)}</span>
+      ${b.url ? `<a href="${esc(b.url)}" target="_blank">source ↗</a>` : ""}
+    </div>
+    ${escalated ? escBar(b.item_id, escalated) : ""}`;
+  return div;
+}
+function sourceLabel(b) {
+  const s = b.item_id.split(":")[0];
+  return {fedreg: "Federal Register", ncua: "NCUA", nacha: "NACHA", irs: "IRS"}[s] || s;
+}
+function escBar(id, state) {
+  if (state === 2) return `<div class="escbar acked"><span class="esclabel">✓ Escalation acknowledged</span></div>`;
+  return `<div class="escbar pulse"><span class="esclabel">⚠ Escalated — awaiting review</span>
+          <button onclick="ack('${id}')">Acknowledge</button></div>`;
+}
+async function ack(id) {
+  await fetch("/api/ack", {method: "POST", body: JSON.stringify({item_id: id})});
+  refreshFeed(true);
+}
+async function refreshFeed(force) {
+  const res = await fetch("/api/feed");
+  const items = await res.json();
+  const feed = document.getElementById("feed");
+  if (items.length && feed.querySelector(".empty")) feed.innerHTML = "";
+  for (const b of items.slice().reverse()) {   // oldest first; prepend → newest on top
+    const key = b.item_id + ":" + b.escalated;
+    if (seen.has(key) && !force) continue;
+    const existing = feed.querySelector(`[data-id="${CSS.escape(b.item_id)}"]`);
+    const fresh = card(b);
+    if (existing) { existing.replaceWith(fresh); }
+    else { fresh.classList.add("new"); feed.prepend(fresh); }
+    [...seen].filter(k => k.startsWith(b.item_id + ":")).forEach(k => seen.delete(k));
+    seen.add(key);
+  }
+  applyFilter();
+}
+
+// --- FOM ---
+const fomBtn = document.getElementById("fomBtn");
+fomBtn.onclick = async () => {
+  const q = document.getElementById("fomInput").value;
+  const box = document.getElementById("fomAnswer");
+  fomBtn.disabled = true; box.style.display = "block";
+  box.innerHTML = `<div class="d">Geocoding and checking districts… (agent is calling the verify_membership tool)</div>`;
+  try {
+    const res = await fetch("/api/fom", {method: "POST", body: JSON.stringify({question: q})});
+    const data = await res.json();
+    const t = data.tool_result || {};
+    box.innerHTML = `
+      <div class="verdict ${esc(t.status || "")}">${esc(t.status || "")}</div>
+      <div style="margin-top:8px">${esc(data.answer)}</div>
+      <div class="chain">${(t.evidence || []).map(e =>
+        `<div class="chainstep"><span class="s">${esc(e.step)}</span> · ${esc(e.source)} → <b>${esc(e.result)}</b><br><span class="d">${esc(e.detail)}</span></div>`).join("")}</div>`;
+  } catch (e) {
+    box.innerHTML = `<div class="verdict UNVERIFIABLE">ERROR</div><div>${esc(String(e))}</div>`;
+  }
+  fomBtn.disabled = false;
+};
+
+// --- audit ---
+async function loadAudit() {
+  const res = await fetch("/api/audit");
+  const data = await res.json();
+  document.getElementById("auditBackend").innerHTML =
+    `reading from <b>${esc(data.backend === "clickhouse" ? "ClickHouse Cloud" : "local SQLite")}</b> — every classification, escalation, acknowledgment, control-plane review, and FOM check`;
+  document.getElementById("auditRows").innerHTML = data.rows.map(r => `
+    <tr class="${esc(r.action)}">
+      <td>${esc((r.ts || "").replace("T", " ").slice(0, 19))}</td>
+      <td class="act">${esc(r.action)}</td>
+      <td>${esc(r.source)}</td>
+      <td>${esc(r.decision)}</td>
+      <td>${esc(r.autonomy_level)}</td>
+      <td>${esc(r.reason)}</td>
+    </tr>`).join("");
+}
+
+// --- status badges ---
+async function loadStatus() {
+  const s = await (await fetch("/api/status")).json();
+  const items = [["Bedrock", true], ["ClickHouse", s.clickhouse], ["Langfuse", s.langfuse],
+                 ["Guild", s.guild], ["Thesys", s.thesys]];
+  document.getElementById("integ").innerHTML = items.map(([n, on]) =>
+    `<span class="integ ${on ? "on" : ""}">${on ? "●" : "○"} ${n}</span>`).join("");
+}
+
+refreshFeed(); loadStatus();
+setInterval(refreshFeed, 2500);
+setInterval(() => { if (document.getElementById("tab-audit").style.display !== "none") loadAudit(); }, 5000);
+setInterval(loadStatus, 15000);
+</script>
+</body>
+</html>

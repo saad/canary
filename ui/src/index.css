@@ -1,0 +1,58 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --color-page: #f6f7f9;
+  --color-rail: #fafbfc;
+  --color-hairline: #e7e5e4;
+  --color-ink: #1c1917;
+  --color-ink-2: #57534e;
+  --color-ink-3: #a8a29e;
+  --color-canary: #f5c518;
+}
+
+html {
+  font-size: 14px;
+}
+
+body {
+  @apply bg-page text-ink font-sans antialiased;
+}
+
+/* new queue row arriving */
+@keyframes row-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.row-in { animation: row-in 200ms ease-out; }
+
+/* a new HIGH pulses its impact dot once */
+@keyframes dot-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0.45); }
+  100% { box-shadow: 0 0 0 9px rgba(185, 28, 28, 0); }
+}
+.dot-pulse-once { animation: dot-pulse 900ms ease-out 2; }
+
+/* liveness dot */
+@keyframes breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.breathe { animation: breathe 2.4s ease-in-out infinite; }
+
+/* right panel slide-in */
+@keyframes panel-in {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.panel-in { animation: panel-in 200ms ease-out; }
+
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* one focus treatment app-wide: the accent ring, never the UA default */
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--color-blue-600);
+  outline-offset: 1px;
+  border-radius: 4px;
+}
